@@ -9,8 +9,9 @@ WiFiClient client;
 
 
 //1 day = 86400000 milliseconds
-const unsigned long aDay = 86400000;
-const unsigned long anHour = 3600000;
+#define A_DAY 86400000;
+#define AN_HOUR 3600000;
+
 String latitude = "51.02";
 String longitude = "3.67";
 String apiKey = "90b1bade0633eb6ac8546782d2f4cbb5";
@@ -20,10 +21,10 @@ bool previousButtonStatusWasLow = true;
 
 //store info about api call astro-info
 unsigned long millisWhenAstroChecked = 0;
-const unsigned long astroCheckInterval = aDay;
+const unsigned long astroCheckInterval = A_DAY;
 //store info about api call time-info
 unsigned long millisWhenTimeChecked = 0;
-const unsigned long timeCheckInterval = aDay;
+const unsigned long timeCheckInterval = AN_HOUR;
 //store moment when sunsetSunrise[0] = sunset - sunsetSunrise[1] = sunrise
 unsigned long sunsetSunrise[2] = {0, 0};
 //store how long it takes until sunset/sunrise
