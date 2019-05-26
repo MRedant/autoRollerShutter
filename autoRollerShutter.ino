@@ -15,6 +15,9 @@ String latitude = "51.02";
 String longitude = "3.67";
 String apiKey = "90b1bade0633eb6ac8546782d2f4cbb5";
 
+//check whether the button went to low before accepting new high
+bool previousButtonStatusWasLow = true;
+
 //store info about api call astro-info
 unsigned long millisWhenAstroChecked = 0;
 const unsigned long astroCheckInterval = aDay;
@@ -37,8 +40,6 @@ const int shutterDownPin = 4;
 const int manualControlStatusPin = 0;
 const int manualControlInput = 2;
 
-bool buttonPressed = false; //value to check if the button is continuously pressed
-
 void setup() {
   Serial.begin(9600);
 
@@ -56,7 +57,7 @@ void setup() {
   //setup wifi
   WiFiManager wifiManager;
   // Uncomment and run it once, if you want to erase all the stored information
-  //wifiManager.resetSettings();
+  // wifiManager.resetSettings();
   // set custom ip for portal
   //wifiManager.setAPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
   // fetches ssid and pass from eeprom and tries to connect
@@ -133,14 +134,14 @@ void loop() {
   }
 
   //disable-enable automatic shutters button
-  if (digitalRead(manualControlInput) == HIGH && !buttonPressed) {
+  if (digitalRead(manualControlInput) == HIGH && previousButtonStatusWasLow) {
     digitalWrite(manualControlStatusPin, (digitalRead(manualControlStatusPin)) == HIGH ? LOW : HIGH);
     Serial.print("automatic shutters ");
     Serial.println((digitalRead(manualControlStatusPin) == HIGH) ? "DISABLED" : "ENABLED");
+    previousButtonStatusWasLow = false;
     delay(300);
-    buttonPressed = true;
-  } else {
-    buttonPressed = false;
+  } else if (digitalRead(manualControlInput) == LOW) {
+    previousButtonStatusWasLow = true;
   }
 
   //todo : put stores up/down in case of sunset/sunrise passed
