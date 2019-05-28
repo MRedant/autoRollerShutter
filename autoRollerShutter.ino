@@ -3,7 +3,7 @@
 #include <WiFiManager.h>         // https://github.com/tzapu/WiFiManager
 #include <time.h>
 
-// Set web server port number to 80
+// Web server port 80
 WiFiServer server(80);
 WiFiClient client;
 
@@ -30,7 +30,7 @@ unsigned long sunsetSunrise[2] = {0, 0};
 //store how long it takes until sunset/sunrise
 unsigned long timeUntilSunsetSunrise[2] = {0, 0};
 
-//to prevent the continuously giving pulses to the motor controller
+//to prevent the unnecessary pulses to the motor controller
 int today;
 bool alreadyClosedToday = false;
 bool alreadyOpenedToday = false;
@@ -57,18 +57,8 @@ void setup() {
 
   //setup wifi
   WiFiManager wifiManager;
-  // Uncomment and run it once, if you want to erase all the stored information
   // wifiManager.resetSettings();
-  // set custom ip for portal
-  //wifiManager.setAPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
-  // fetches ssid and pass from eeprom and tries to connect
-  // if it does not connect it starts an access point with the specified name
-  // here  "AutoConnectAP"
-  // and goes into a blocking loop awaiting configuration
   wifiManager.autoConnect("AutoConnectAP");
-  // or use this for auto generated name ESP + ChipID
-  //wifiManager.autoConnect();
-  // if you get here you have connected to the WiFi
   Serial.println("Connected.");
 
   //setup time
@@ -86,7 +76,8 @@ void setup() {
 
 void loop() {
 
-  client  = server.available();   // Listen for incoming clients;
+  // Listen for incoming clients;
+  client  = server.available();
 
   //astro times checked once a Day or after reboot
   if (millis() - millisWhenAstroChecked > astroCheckInterval || millisWhenAstroChecked == 0 ) {
@@ -147,8 +138,6 @@ void loop() {
 
   //todo : put stores up/down in case of sunset/sunrise passed
 }
-
-
 
 //to parse json data recieved from OWM
 void parseJson(WiFiClient client, unsigned long sunsetSunrise[2]) {
